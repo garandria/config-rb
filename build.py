@@ -48,12 +48,13 @@ def build(source, dest, env_list, binary,
             output.write(return_content.stdout)
         with open(data_stderr_output, 'wb') as output:
             output.write(return_content.stderr)
+        print(f"{str(return_content.stdout)}\n{str(return_content.stderr)}")
 
         duration = None
         with open(data_time_output, 'r') as stream:
             duration = float(stream.readlines()[0].strip().split()[-1])
 
-        return os.path.isfile(os.path.join(dest_real_path, binary)), duration
+        # return os.path.isfile(os.path.join(dest_real_path, binary)), duration
 
     return return_content.returncode == 0
 
