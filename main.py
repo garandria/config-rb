@@ -72,7 +72,7 @@ def main():
             else:
                 err += 1
                 print("Failure", flush=True)
-        i -= 1
+
         print(f"{i} configurations generated in {outdir} and all build successfully.", flush=True)
         print(f"{err} configurations were not kept for they failed to build.", flush=True)
 
