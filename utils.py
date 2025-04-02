@@ -1,7 +1,7 @@
 import os
 import requests
 import tarfile
-
+import hashlib
 
 def download(link):
     output = os.path.basename(link)
@@ -23,4 +23,8 @@ def extract(archive):
         tar.extractall()
     return output
 
-
+def md5hash(filename):
+    h = None
+    with open(filename, 'rb') as stream:
+        h = hashlib.md5(stream.read()).hexdigest()
+    return h
