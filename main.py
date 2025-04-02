@@ -14,6 +14,7 @@ def main():
     parser.add_argument("--reproducible-check", type=str,
                         dest="configs_dir")
     parser.add_argument("--source", type=str)
+    parser.add_argument("--debug", action="store_true")
 
     args = parser.parse_args()
 
@@ -57,7 +58,7 @@ def main():
             build.randconfig(source, "config.preset-x86_64")
             print(f"randconfig", end=" - ")
             ok = build.build(source, source, env_list, "vmlinux",
-                             nproc=args.threads)
+                             nproc=args.threads, keep_metadata=args.debug)
             print(f"Build:", end=" ")
             if ok:
                 shutil.copy(abs_config_path, os.path.join(outdir, f"{i:{lz}}.config"))
