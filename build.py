@@ -57,4 +57,8 @@ def randconfig(source, preset=None):
                                 cwd=source)
 
 
-
+def distclean(source):
+    return_content = subprocess.run("make distclean",
+                                capture_output=True,
+                                shell=True,
+                                cwd=source)
