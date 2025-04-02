@@ -30,10 +30,9 @@ def main():
         majorv = args.version.split('.', 1)[0]
         link = os.path.join("https://cdn.kernel.org/pub/linux/kernel/",
                             f"v{majorv}.x", f"linux-{version}.tar.gz")
-        archive = download(link)
-        print("done")
-        source = extract(archive).rsplit('.', 2)[0]
-        print(f"Source tree extracted in {source}")
+        archive = utils.download(link)
+        source = utils.extract(archive)
+        print(f"Source tree extracted in {source}", flush=True)
 
     outdir = "linux-configs"
     os.mkdir(outdir)
