@@ -3,17 +3,17 @@ import requests
 import tarfile
 
 
-def download(version):
-    major, minor = version.split('.', 1)
-    base_link = f"https://cdn.kernel.org/pub/linux/kernel/v{major}.x/"
-    down_link = f"{base_link}linux-{version}.tar.gz"
-    response = requests.get(down_link)
+def download(link):
+    output = os.path.basename(link)
+    response = requests.get(link)
     if response.status_code == 200:
-        with open(f"linux-{version}.tar.gz", "wb") as file:
-            file.write(response.content)
-        print(f"Downloaded linux-{version}.tar.gz successfully.")
+        with open(output, "wb") as stream:
+            stream.write(response.content)
+        print(f"{output} downloaded successfully.")
+        return output
     else:
-        print(f"Failed to download linux-{version}.tar.gz. Status code: {response.status_code}")
+        print(f"Failed to download {output}."\
+              f"Status code: {response.status_code}")
 
 
 def extract(archive):
