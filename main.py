@@ -2,7 +2,7 @@ import os
 import argparse
 import shutil
 import build
-
+import utils
 
 def main():
     parser = argparse.ArgumentParser(
@@ -49,7 +49,7 @@ def main():
     abs_config_path = os.path.join(source, ".config")
     i = 1
     err = 0
-
+    cset = set()
     if args.gen:
         print(f"Generating {n} configurations...")
         while i <= n:
@@ -57,6 +57,10 @@ def main():
             print(f"{i:{lz}}", end=" - ")
             build.randconfig(source, "config.preset-x86_64")
             print(f"randconfig", end=" - ")
+            if utils.md5hash(abs_config_path) in cset:
+                continue
+            else:
+                cset.add(utils.md5hash(abs_config_path))
             ok = build.build(source, source, env_list, "vmlinux",
                              nproc=args.threads, keep_metadata=args.debug)
             print(f"Build:", end=" ")
