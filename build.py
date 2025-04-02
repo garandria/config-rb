@@ -62,7 +62,7 @@ def randconfig(source, preset=None):
     cmdl = []
     if preset:
         preset_real_path = os.path.realpath(preset)
-        cmdl.append(f"KCONFIG_CONFIG={preset_real_path}")
+        cmdl.append(f"KCONFIG_ALLCONFIG={preset_real_path}")
     cmdl.append("make randconfig")
     cmd = " ".join(cmdl)
     return_content = subprocess.run(cmd,
