@@ -9,6 +9,7 @@ def main():
         description="Configuration Reproducible Builds")
     parser.add_argument("--version", type=str, required=True)
     parser.add_argument("--generate-configs", action="store_true", dest="gen")
+    parser.add_argument("--output", type=str, default="build")
     parser.add_argument("--n", type=int, default=10)
     parser.add_argument("--threads", type=int)
     parser.add_argument("--reproducible-check", type=str,
@@ -34,9 +35,11 @@ def main():
         source = utils.extract(archive)
         print(f"Source tree extracted in {source}", flush=True)
 
-    outdir = "linux-configs"
-    os.mkdir(outdir)
-    print(f"{outdir} created", flush=True)
+    outdir = os.path.realpath(args.output)
+    print(f"Output directory: {outdir}", flush=True)
+    if not os.path.isdir():
+        os.mkdir(outdir)
+        print(f"{outdir} created", flush=True)
 
     env_list = [
         'KBUILD_BUILD_TIMESTAMP="Sun Jan 1 01:00:00 UTC 2023"',
