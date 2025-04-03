@@ -37,7 +37,7 @@ def main():
 
     outdir = os.path.realpath(args.output)
     print(f"Output directory: {outdir}", flush=True)
-    if not os.path.isdir():
+    if not os.path.isdir(outdir):
         os.mkdir(outdir)
         print(f"{outdir} created", flush=True)
 
