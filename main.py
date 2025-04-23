@@ -65,8 +65,8 @@ def main():
         'KBUILD_BUILD_HOST="host"',
         'KBUILD_BUILD_VERSION="1"'
     ]
-    abs_config_path = os.path.join(source, ".config")
     preset = os.path.realpath("config.preset-x86_64")
+    configintree = os.path.join(source, ".config")
     i = 1
     err = 0
     cset = set()
@@ -77,10 +77,10 @@ def main():
             print(f"{i:{lz}}", end=" - ", flush=True)
             build.randconfig(source, preset)
             print(f"randconfig", end=" - ", flush=True)
-            if utils.md5hash(abs_config_path) in cset:
+            if utils.md5hash(configintree) in cset:
                 continue
             else:
-                cset.add(utils.md5hash(abs_config_path))
+                cset.add(utils.md5hash(configintree))
             ok = build.build(source, source, env_list, "vmlinux",
                              nproc=args.threads, keep_metadata=args.debug)
             print(f"Build:", end=" ", flush=True)
