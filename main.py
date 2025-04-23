@@ -104,6 +104,7 @@ def main():
     configpath = os.path.realpath(args.configpath)
     if args.rebuild:
         for conf in map(lambda x: os.path.join(configpath, x), os.listdir(configpath)):
+            num = os.path.basename(conf).split('.')[0]
             build.distclean(source)
             print(f"{i:{lz}}", end=" - ", flush=True)
             shutil.copy(conf, configintree)
@@ -112,9 +113,9 @@ def main():
             print(f"Build:", end=" ", flush=True)
             if ok:
                 shutil.copy(os.path.join(source, "vmlinux"),
-                            os.path.join(outdir, f"{i:{lz}}.vmlinux"))
+                            os.path.join(outdir, f"{num}.vmlinux"))
                 shutil.copy(os.path.join(source, "__time"),
-                            os.path.join(outdir, f"{i:{lz}}.time"))
+                            os.path.join(outdir, f"{num}.time"))
                 i += 1
                 print("Success", flush=True)
             else:
