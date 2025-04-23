@@ -103,7 +103,9 @@ def main():
 
     configpath = os.path.realpath(args.configpath)
     if args.rebuild:
-        for conf in map(lambda x: os.path.join(configpath, x), os.listdir(configpath)):
+        confs = list(map(lambda x: os.path.join(configpath, x), os.listdir(configpath)))
+        confs.sort()
+        for conf in confs:
             num = os.path.basename(conf).split('.')[0]
             build.distclean(source)
             print(f"{num}", end=" - ", flush=True)
