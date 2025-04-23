@@ -50,11 +50,6 @@ def main():
         source = os.path.realpath(args.source)
         print(f"Source in {source}", flush=True)
 
-    confout = os.path.realpath(f"config-{args.version}")
-    print(f"Output directory: {confout}", flush=True)
-    if not os.path.isdir(confout):
-        os.mkdir(confout)
-        print(f"{confout} created", flush=True)
     outdir = os.path.realpath(f"{args.output}-{args.version}")
     print(f"Output directory: {outdir}", flush=True)
     if not os.path.isdir(outdir):
@@ -73,6 +68,11 @@ def main():
     err = 0
     cset = set()
     if args.gen:
+        confout = os.path.realpath(f"configs-{args.version}")
+        print(f"Output directory: {confout}", flush=True)
+        if not os.path.isdir(confout):
+            os.mkdir(confout)
+            print(f"{confout} created", flush=True)
         print(f"Generating {n} configurations...", flush=True)
         while i <= n:
             build.distclean(source)
