@@ -23,17 +23,29 @@ def main():
     lz = f"0{len(str(n))}"
     version = args.version
     source = None
-    if args.source:
+    archive = f"linux-{version}.tar.gz"
+    if args.source is None:
+        print(f"No source provided, checking for {archive}", flush=True)
+        s = f"linux-{args.version}"
+        if os.path.isdir(s):
+            print(f"Source {s} already exist, cleaning...", flush=True, end=" ")
+            build.distclean(s)
+            print("done", flush=True)
+            source = os.path.realpath(s)
+        else:
+            if not os.path.isfile(archive):
+                print("Downloading source code archive...", flush=True)
+                majorv = args.version.split('.', 1)[0]
+                link = os.path.join("https://cdn.kernel.org/pub/linux/kernel/",
+                                    f"v{majorv}.x", f"linux-{version}.tar.gz")
+                archive = utils.download(link)
+                print(f"Source tree extracted in {source}", flush=True)
+            print(f"Extracting {archive}...", flush=True, end=" ")
+            source = utils.extract(archive)
+            print(f"-> {source}", flush=True)
+    else:
         source = os.path.realpath(args.source)
-        print(f"Source tree in {source}", flush=True)
-    if not os.path.isfile(f"linux-{version}.tar.gz") or source is None:
-        print("Downloading source code archive...", flush=True)
-        majorv = args.version.split('.', 1)[0]
-        link = os.path.join("https://cdn.kernel.org/pub/linux/kernel/",
-                            f"v{majorv}.x", f"linux-{version}.tar.gz")
-        archive = utils.download(link)
-        source = utils.extract(archive)
-        print(f"Source tree extracted in {source}", flush=True)
+        print(f"Source in {source}", flush=True)
 
     outdir = os.path.realpath(args.output)
     print(f"Output directory: {outdir}", flush=True)
