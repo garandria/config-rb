@@ -106,7 +106,6 @@ def main():
         for conf in map(lambda x: os.path.join(configpath, x), os.listdir(configpath)):
             build.distclean(source)
             print(f"{i:{lz}}", end=" - ", flush=True)
-            print(conf, configintree)
             shutil.copy(conf, configintree)
             ok = build.build(source, source, env_list, "vmlinux",
                              nproc=args.threads, keep_metadata=args.debug)
