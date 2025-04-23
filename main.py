@@ -12,10 +12,12 @@ def main():
     parser.add_argument("--output", type=str, default="build")
     parser.add_argument("--n", type=int, default=10)
     parser.add_argument("--threads", type=int)
+    parser.add_argument("--configpath", type=str)
     parser.add_argument("--reproducible-check", type=str,
                         dest="configs_dir")
     parser.add_argument("--source", type=str)
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--rebuild", action="store_true")
     parser.add_argument("--preset", type=str)
 
     args = parser.parse_args()
@@ -96,6 +98,27 @@ def main():
 
         print(f"{i-1} configurations generated in {confout} and all build successfully.", flush=True)
         print(f"{err} configurations were not kept for they failed to build.", flush=True)
+
+    configpath = os.path.realpath(args.configpath)
+    if args.rebuild:
+        for conf in map(lambda x: os.path.join(configpath, x), os.listdir(configpath)):
+            build.distclean(source)
+            print(f"{i:{lz}}", end=" - ", flush=True)
+            print(conf, configintree)
+            shutil.copy(conf, configintree)
+            ok = build.build(source, source, env_list, "vmlinux",
+                             nproc=args.threads, keep_metadata=args.debug)
+            print(f"Build:", end=" ", flush=True)
+            if ok:
+                shutil.copy(os.path.join(source, "vmlinux"),
+                            os.path.join(outdir, f"{i:{lz}}.vmlinux"))
+                shutil.copy(os.path.join(source, "__time"),
+                            os.path.join(outdir, f"{i:{lz}}.time"))
+                i += 1
+                print("Success", flush=True)
+            else:
+                err += 1
+                print("Failure", flush=True)
 
 
 if __name__ == "__main__":
