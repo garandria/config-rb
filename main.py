@@ -90,6 +90,8 @@ def main():
                 shutil.copy(configintree, os.path.join(confout, f"{i:{lz}}.config"))
                 shutil.copy(os.path.join(source, "vmlinux"),
                             os.path.join(outdir, f"{i:{lz}}.vmlinux"))
+                shutil.copy(os.path.join(source, "__time"),
+                            os.path.join(outdir, f"{i:{lz}}.time"))
                 i += 1
                 print("Success", flush=True)
             else:
