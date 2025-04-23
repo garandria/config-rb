@@ -16,6 +16,7 @@ def main():
                         dest="configs_dir")
     parser.add_argument("--source", type=str)
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--preset", type=str)
 
     args = parser.parse_args()
 
@@ -64,8 +65,8 @@ def main():
         'KBUILD_BUILD_HOST="host"',
         'KBUILD_BUILD_VERSION="1"'
     ]
-
     abs_config_path = os.path.join(source, ".config")
+    preset = os.path.realpath("config.preset-x86_64")
     i = 1
     err = 0
     cset = set()
@@ -74,7 +75,7 @@ def main():
         while i <= n:
             build.distclean(source)
             print(f"{i:{lz}}", end=" - ", flush=True)
-            build.randconfig(source, "config.preset-x86_64")
+            build.randconfig(source, preset)
             print(f"randconfig", end=" - ", flush=True)
             if utils.md5hash(abs_config_path) in cset:
                 continue
