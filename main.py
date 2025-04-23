@@ -47,7 +47,12 @@ def main():
         source = os.path.realpath(args.source)
         print(f"Source in {source}", flush=True)
 
-    outdir = os.path.realpath(args.output)
+    confout = os.path.realpath(f"config-{args.version}")
+    print(f"Output directory: {confout}", flush=True)
+    if not os.path.isdir(confout):
+        os.mkdir(confout)
+        print(f"{confout} created", flush=True)
+    outdir = os.path.realpath(f"{args.output}-{args.version}")
     print(f"Output directory: {outdir}", flush=True)
     if not os.path.isdir(outdir):
         os.mkdir(outdir)
@@ -79,7 +84,7 @@ def main():
                              nproc=args.threads, keep_metadata=args.debug)
             print(f"Build:", end=" ", flush=True)
             if ok:
-                shutil.copy(abs_config_path, os.path.join(outdir, f"{i:{lz}}.config"))
+                shutil.copy(configintree, os.path.join(confout, f"{i:{lz}}.config"))
                 shutil.copy(os.path.join(source, "vmlinux"),
                             os.path.join(outdir, f"{i:{lz}}.vmlinux"))
                 i += 1
@@ -88,7 +93,7 @@ def main():
                 err += 1
                 print("Failure", flush=True)
 
-        print(f"{i} configurations generated in {outdir} and all build successfully.", flush=True)
+        print(f"{i-1} configurations generated in {confout} and all build successfully.", flush=True)
         print(f"{err} configurations were not kept for they failed to build.", flush=True)
 
 
